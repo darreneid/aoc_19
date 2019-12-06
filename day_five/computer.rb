@@ -62,7 +62,7 @@ require_relative '../day_four/code.rb'
             @program[@program[@pos+1]] = input
             @pos += 2
         when 4
-            puts p1
+            puts "[Opcode 4] Output: #{p1}"
             @pos += 2
         when 5
             @pos = (p1 == 0) ? (@pos + 3) : (p2)
