@@ -1,19 +1,22 @@
 require_relative '../day_four/code.rb'
 
  class IntcodeComp
-    def self.read_from_file
-        File.read("input.txt").split(",").map(&:to_i)
+    def self.read_from_file(path)
+        File.read(path).split(",").map(&:to_i)
     end
 
-    def initialize
+    def initialize(path, phase=[])
         @pos = 0
-        @program = IntcodeComp.read_from_file
+        @input = [phase]
+        @program = IntcodeComp.read_from_file(path)
     end
 
-    def run
+    def run(*input)
+        @input += input
         while true
             op, mod = parse(@program[@pos])
-            return @program[0] if op == 9
+            return [0, 99] if op == 99
+            return execute(op, mod) if op == 4
             execute(op, mod)
         end
     end
@@ -21,6 +24,7 @@ require_relative '../day_four/code.rb'
     def parse(instruction)
         digs = digits(instruction)
         opcode = digs[-1]
+        opcode = 10*digs[-2] + opcode if digs[-2]
         modes = digs[0...-2]
         modes = modes.reverse if modes
         return [opcode, modes]
@@ -41,13 +45,6 @@ require_relative '../day_four/code.rb'
             p2 = @program[@program[@pos+2]]
         end
 
-        case modes[2]
-        when 1
-            p3 = @program[@pos+3]
-        else
-            p3 = @program[@program[@pos+3]]
-        end
-
         case op
         when 1
             @program[@program[@pos+3]] = p1 + p2
@@ -56,14 +53,16 @@ require_relative '../day_four/code.rb'
             @program[@program[@pos+3]] = p1*p2
             @pos += 4
         when 3
-            print "[Opcode 3] Input: "
-            input = gets.chomp.to_i
+            # puts "[Opcode 3] Input: #{@input[0]}"
+            # input = gets.chomp
         
-            @program[@program[@pos+1]] = input
+            @program[@program[@pos+1]] = @input[0]
+            @input.shift
             @pos += 2
         when 4
-            puts "[Opcode 4] Output: #{p1}"
+            # puts "[Opcode 4] Output: #{p1}"
             @pos += 2
+            return [p1, op]
         when 5
             @pos = (p1 == 0) ? (@pos + 3) : (p2)
         when 6
@@ -78,5 +77,5 @@ require_relative '../day_four/code.rb'
     end
  end
 
-x = IntcodeComp.new
-x.run
+# x = IntcodeComp.new('input.txt')
+# x.run
