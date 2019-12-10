@@ -40,7 +40,7 @@ def distance(map, start, finish)
     s_orbits = orbits(s)
     f_orbits = orbits(f)
 
-    return s_orbits.index(finish) if s_orbits.include?(finish)
+    return s_orbits.index(finish) if s_orbits.include?(finish   )
     return f_orbits.index(start) if f_orbits.include?(start)
 
     ancestor = (s_orbits & f_orbits).first
