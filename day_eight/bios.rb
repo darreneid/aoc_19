@@ -31,7 +31,7 @@ def part_one
     res[1]*res[2]
 end
 
-# p part_one
+p part_one
 
 def print_image(file, width, height)
     image = Array.new(height) {Array.new(width)}
