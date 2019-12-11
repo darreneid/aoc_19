@@ -7,11 +7,13 @@ require 'byebug'
         input = File.read(path).split(",").map(&:to_i) + Array.new(1000000,0)
     end
 
-    def initialize(path, phase=[])
+    def initialize(path, robot, *input)
         @pos = 0
-        @input = [phase]
+        @input = input
+        @output = []
         @rel_base = 0
         @program = IntcodeComp.read_from_file(path)
+        @robot = robot
     end
 
     def run(*input)
@@ -63,15 +65,25 @@ require 'byebug'
             @program[@program[@pos+3] + adj] = p1*p2
             @pos += 4
         when 3
-            puts "[Opcode 3] Input: #{@input[0]}"
+            if @input.length == 0
+                num = @robot.detect
+                # puts "[Opcode 3] Input: #{num}"
+            else
+                num = @input.shift
+                # puts "[Opcode 3] Input: #{num}"
+            end
+
             adj = (modes[0] == 2) ? (@rel_base) : 0
-            @program[@program[@pos+1] + adj] = @input[0]
-            @input.shift
+            @program[@program[@pos+1] + adj] = num
             @pos += 2
         when 4
-            puts "[Opcode 4] Output: #{p1}"
+            # puts "[Opcode 4] Output: #{p1}"
+            @output << p1
+            if @output.length == 2
+                @robot.paint(@output.shift)
+                @robot.process(@output.shift)
+            end
             @pos += 2
-            # return [p1, op]
         when 5
             @pos = (p1 == 0) ? (@pos + 3) : (p2)
         when 6
