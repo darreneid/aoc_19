@@ -12,9 +12,9 @@ def degrees_from_north(base, target)
     (Math.atan(y_diff/x_diff) + Math::PI/2) + base
 end
 
-def dist(p1, p2)
-    x1, y1 = p1
-    x2, y2 = p2
+def dist(base, target)
+    x1, y1 = base
+    x2, y2 = target
     x_diff = (x2 - x1).to_f
     y_diff = (y2 - y1).to_f
 
@@ -32,6 +32,8 @@ def asteroids(input)
 end
 
 def part_one
+    starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
     asteroids = asteroids(CHART)
     targets = Hash.new {|h,k| h[k] = Array.new}
 
@@ -40,10 +42,7 @@ def part_one
             next if base == target
 
             dfn = degrees_from_north(base, target)
-
-            if !targets[base].include?(dfn)
-                targets[base] << dfn
-            end
+            targets[base] << dfn if !targets[base].include?(dfn)
         end
     end
 
@@ -51,13 +50,18 @@ def part_one
         (targets[el].length > targets[acc].length) ? el : acc
     end
 
-    p "Position: #{x}"
-    p "Targets: #{targets[x].length}"
+    puts "Base Position: #{x}"
+    puts "Visible Asteroids: #{targets[x].length}"
+
+    ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    elapsed = ending - starting
+    puts "Time Elapsed: #{elapsed}"
 end
 
 def part_two(nth)
-    asteroids = asteroids(CHART)
+    starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
+    asteroids = asteroids(CHART)
     asteroids_by_angle = Hash.new {|h,k| h[k] = Array.new}
 
     asteroids.each do |pos|
@@ -69,6 +73,7 @@ def part_two(nth)
     end
 
     sorted_angles = asteroids_by_angle.keys.sort
+    target = nil
 
     (0...nth).each do |num|
         index = num % sorted_angles.length
@@ -78,10 +83,15 @@ def part_two(nth)
             (el[1] < acc[1]) ? el : acc
         end
 
-        p "Target #{num}: #{target[0]}"
-
         asteroids_by_angle[angle] - target
     end
+
+    puts "Target ##{nth}: #{target[0]}"
+    ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    elapsed = ending - starting
+    puts "Time Elapsed: #{elapsed}"
 end
 
+part_one
+puts
 part_two(200)
