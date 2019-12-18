@@ -73,6 +73,8 @@ class Robot
             file.print "\n"
         end
         file.close
+
+        puts "Output saved to file: 'output.txt'"
     end
 
 end
