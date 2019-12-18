@@ -5,37 +5,6 @@ data = File.read('input.txt').chomp.split('').map(&:to_i)
 super_data = data.dup * 10000
 vector_data = Vector.elements(super_data)
 
-class SuperArray
-    include Enumerable
-
-    attr_reader :length
-
-    def initialize(len, default=nil)
-        default ||= Array.new(650, nil)
-
-        @grid = Array.new(len) {default.dup}
-        @length = len*650
-    end
-
-    def each(&blk)
-        @grid.each do |row|
-            row.each do |el|
-                blk.call(el)
-            end
-        end
-    end
-
-    def [](index)
-        q, r = index.divmod(650)
-        @grid[q][r]
-    end
-
-    def []=(index, val)
-        q, r = index.divmod(650)
-        @grid[q][r] = val
-    end
-end
-
 def pattern(n)
     pat = []
     base = [0,1,0,-1]
@@ -78,8 +47,6 @@ def recursive_fft(data_in, n)
     data_in
 end
 
-# sig = SuperArray.new(10000, data)
 signal = recursive_fft(vector_data, 100)
-# # p signal
-# offset = signal[0...7]
+offset = signal[0...7]
 p signal[offset..offset+8]
