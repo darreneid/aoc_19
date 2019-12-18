@@ -66,21 +66,18 @@ require 'byebug'
             @pos += 4
         when 3
             if @input.length == 0
-                num = @robot.detect
-                # puts "[Opcode 3] Input: #{num}"
+                
             else
                 num = @input.shift
-                # puts "[Opcode 3] Input: #{num}"
             end
-
+            
             adj = (modes[0] == 2) ? (@rel_base) : 0
             @program[@program[@pos+1] + adj] = num
             @pos += 2
         when 4
             # puts "[Opcode 4] Output: #{p1}"
             @output << p1
-            if @output.length == 2
-                @robot.paint(@output.shift)
+            if @output.length == 1
                 @robot.process(@output.shift)
             end
             @pos += 2
@@ -102,6 +99,3 @@ require 'byebug'
         end
     end
  end
-
-# x = IntcodeComp.new('input.txt')
-# x.run
