@@ -72,7 +72,7 @@ class System
     end
 
     def total_energy
-        bodies.inject(0) {|acc, body| acc + body.potential_energy*body.kinetic_energy}
+        bodies.inject(0) {|acc, body| acc + body.total_energy}
     end
 end
 
@@ -90,9 +90,6 @@ def part_one
     puts "Total Energy: #{sys.total_energy}"
 end
 
-counter = 0
-history = Hash.new
-
 def part_two
     pos1 = [1,4,4]
     pos2 = [-4,-1,19]
@@ -103,13 +100,14 @@ def part_two
     moons = positions.map {|pos| Moon.new(pos)}
     sys = System.new(moons)
     counter = 0
-    history = Hash.new
+    data = Hash.new
 
     while true
-        break if history[sys.get_state]
-        history[sys.get_state] = 1
+        break if data[sys.get_state]
+        data[sys.get_state] = 1
         sys.step
         counter += 1
+        counter
     end
 
     puts "Steps: #{counter}"
