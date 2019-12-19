@@ -3,6 +3,7 @@ require 'byebug'
 data = File.read('input.txt').chomp.split('').map(&:to_i)
 super_data = data.dup * 10000
 
+<<<<<<< HEAD
 
 def calculate(data, i)
     res = 0
@@ -24,6 +25,16 @@ def calculate(data, i)
         range.each {|el| res -= el}
 
         n += 1
+=======
+def pattern(n)
+    pat = []
+    base = [0,1,0,-1]
+    
+    base.each do |el|
+        (n+1).times do
+            pat << el
+        end
+>>>>>>> c8ee3d909ff35f387de9cfd7aeb2e2a72ca6f7ec
     end
 
     res
@@ -52,5 +63,11 @@ def recursive_fft(data_in, n)
     data_in
 end
 
+<<<<<<< HEAD
 signal = recursive_fft(super_data, 100)
 puts signal[0...7].join
+=======
+signal = recursive_fft(vector_data, 100)
+offset = signal[0...7]
+p signal[offset..offset+8]
+>>>>>>> c8ee3d909ff35f387de9cfd7aeb2e2a72ca6f7ec

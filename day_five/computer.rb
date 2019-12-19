@@ -62,6 +62,7 @@ require 'byebug'
             self.mem[mem[pos+3] + adj] = p1*p2
             self.pos += 4
         when 3
+<<<<<<< HEAD
             num = prog.get_input
 
             adj = (modes[0] == 2) ? (rel_base) : 0
@@ -70,6 +71,24 @@ require 'byebug'
         when 4
             prog.receive_output(p1)
             self.pos += 2
+=======
+            if @input.length == 0
+                
+            else
+                num = @input.shift
+            end
+            
+            adj = (modes[0] == 2) ? (@rel_base) : 0
+            @program[@program[@pos+1] + adj] = num
+            @pos += 2
+        when 4
+            # puts "[Opcode 4] Output: #{p1}"
+            @output << p1
+            if @output.length == 1
+                @robot.process(@output.shift)
+            end
+            @pos += 2
+>>>>>>> c8ee3d909ff35f387de9cfd7aeb2e2a72ca6f7ec
         when 5
             self.pos = (p1 == 0) ? (pos + 3) : (p2)
         when 6
@@ -87,4 +106,8 @@ require 'byebug'
             self.pos += 2
         end
     end
+<<<<<<< HEAD
  end
+=======
+ end
+>>>>>>> c8ee3d909ff35f387de9cfd7aeb2e2a72ca6f7ec
