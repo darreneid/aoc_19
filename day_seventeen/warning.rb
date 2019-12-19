@@ -3,12 +3,17 @@ require_relative '../day_five/computer.rb'
 class Ascii
     attr_accessor :view, :current_row
 
-    def initialize
+    def initialize(input = [])
         @view = Array.new(1) {Array.new}
         @current_row = 0
+        @input = input
     end
 
-    def process(input)
+    def get_input
+        @input.shift
+    end
+
+    def receive_output(input)
         case input
     
         when 10
@@ -57,15 +62,15 @@ def asciify(input)
 end
 
 
-bot = Ascii.new
-
 main = asciify(["A", "B", "B", "A", "C", "A", "C", "A", "C", "B"])
 func_a = asciify(["L", "6", "R", "4", "8", "R", "8"])
 func_b = asciify(["R", "8", "R", "4", "8", "L", "4", "8"])
 func_c = asciify(["R", "4", "8", "L", "4", "8", "L", "4", "L", "4"])
 options = asciify(["n"])
 
-comp = IntcodeComp.new('input.txt', bot, *main, *func_a, *func_b, *func_c, *options)
-comp.run
+input = main + func_a + func_b + func_c + options
+bot = Ascii.new(input)
+comp = IntcodeComp.new('input.txt', bot)
 
+comp.run
 bot.display
